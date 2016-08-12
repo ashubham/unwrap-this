@@ -1,6 +1,6 @@
 {
   "name": "unwrap-this",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "unwrap 'this' as a param.",
   "main": "index.js",
   "scripts": {
