@@ -11,17 +11,41 @@ Useful when passing callbacks to third-party modules/libraries.
 
 `npm i unwrap-this --save`
 
-### Quick Usage
+### Usage
 
 ```javascript
 var unwrap = require('unwrap-this');
 
-function onEventHappened(ctx, ...params) {
+function onEventHappened(self, ...params) {
     // ctx passed as a param instead of being set to `this`.
 }
 
 var config = {
     option1: 'test',
-    onSomeEvent: unwrap(onEventHappened) // The lib will call onSomeEvent() with some `this` ctx.
+    // The lib will call onSomeEvent() with some `this` ctx.
+    onSomeEvent: unwrap(onEventHappened)
 };
+```
+
+A more detailed example could be
+
+```javascript
+var unwrap = require('unwrap-this');
+
+function MyClass() {
+    this.configOfThirdPartyLib = {
+        opt1: true,
+        opt2: false,
+        onReady: unwrap(this.readyCallback.bind(this))
+    };
+    
+    this.prop1 = 'some prop value';
+}
+
+MyClass.prototype.doSomething = function() {};
+
+MyClass.prototype.readyCallback = function(tpInstance, ...params) {
+    // Can access myClass instance's methods/props AND ctx of the caller.
+    this.doSomething(tpInstance.name);
+}
 ```
